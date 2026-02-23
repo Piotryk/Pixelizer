@@ -199,19 +199,36 @@ def main(mode):
             main_window['SLIDER_Y'].update(int(1024))
 
         if event == "ROTATE_LEFT":
-            original_image = original_image.rotate(90)
-            current_res = (int(values['SLIDER_X']), int(values['SLIDER_Y']))
+            original_image = original_image.rotate(90, expand=True)
+            original_size = real_size = (original_size[1], original_size[0])
+            temp = values['SLIDER_X']
+            main_window['SLIDER_X'].update(int(values['SLIDER_Y']))
+            main_window['SLIDER_Y'].update(int(temp))
+            current_res = (int(values['SLIDER_Y']), int(values['SLIDER_X']))
+
+            if original_size[0] > img_size or original_size[1] > img_size:
+                ratio = max(original_size[0], original_size[1]) / img_size
+                real_size = (int(original_size[0] / ratio), int(original_size[1] / ratio))
             imgSmall = original_image.resize(current_res, resample=Image.Resampling.NEAREST)
             img = imgSmall.resize(real_size, Image.Resampling.NEAREST)
 
             if flag_recolored:
                 img = img.convert('P', palette=Image.ADAPTIVE, colors=int(values['SLIDER_COLOR']))
+            #draw_figure(main_window['IMAGE'], original_image)
             draw_figure(main_window['IMAGE'], img)
             debug(main_window, f'resized image to {current_res}')
 
         if event == "ROTATE_RIGHT":
-            original_image = original_image.rotate(-90)
-            current_res = (int(values['SLIDER_X']), int(values['SLIDER_Y']))
+            original_image = original_image.rotate(-90, expand=True)
+            original_size = real_size = (original_size[1], original_size[0])
+            temp = values['SLIDER_X']
+            main_window['SLIDER_X'].update(int(values['SLIDER_Y']))
+            main_window['SLIDER_Y'].update(int(temp))
+            current_res = (int(values['SLIDER_Y']), int(values['SLIDER_X']))
+
+            if original_size[0] > img_size or original_size[1] > img_size:
+                ratio = max(original_size[0], original_size[1]) / img_size
+                real_size = (int(original_size[0] / ratio), int(original_size[1] / ratio))
             imgSmall = original_image.resize(current_res, resample=Image.Resampling.NEAREST)
             img = imgSmall.resize(real_size, Image.Resampling.NEAREST)
 
